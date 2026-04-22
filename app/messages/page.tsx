@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import {
   Search,
@@ -34,7 +34,7 @@ interface ChatMessage {
   isOwn: boolean
 }
 
-export default function MessagesPage() {
+function MessagesContent() {
   const searchParams = useSearchParams()
   const toParam = searchParams.get('to')
   
@@ -384,5 +384,19 @@ export default function MessagesPage() {
         </div>
       </main>
     </div>
+  )
+}
+
+export default function MessagesPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        </div>
+      }
+    >
+      <MessagesContent />
+    </Suspense>
   )
 }
